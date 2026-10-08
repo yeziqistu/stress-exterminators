@@ -399,7 +399,7 @@
         .support-strip p { margin-bottom: 0; }
 
         /* ========================================
-           首页视频区
+           首页视频
            ======================================== */
 
         .home-video {
@@ -418,21 +418,48 @@
             background: #000;
         }
 
-        .home-video .caption {
-            margin-top: 14px;
+        /* ========================================
+           视频无障碍描述
+           ======================================== */
+
+        .video-description {
+            margin-top: 18px;
+            padding: 18px 20px;
+            background: var(--page);
+            border-left: 4px solid var(--green);
+            border-radius: 0 12px 12px 0;
+        }
+
+        .video-description > p {
+            margin-bottom: 10px;
+            font-size: .95rem;
+        }
+
+        .video-description details {
+            margin-top: 10px;
             font-size: .9rem;
+        }
+
+        .video-description summary {
+            cursor: pointer;
+            color: var(--green);
+            font-weight: 700;
+            padding: 5px 0;
+        }
+
+        .video-description ul {
+            margin: 10px 0 0;
+            padding-left: 20px;
             color: var(--muted);
         }
 
+        .video-description ul li { margin-bottom: 6px; }
+
         /* ========================================
-           主题筛选及活动
+           活动筛选
            ======================================== */
 
-        .page-intro {
-            max-width: 760px;
-            margin-bottom: 24px;
-        }
-
+        .page-intro { max-width: 760px; margin-bottom: 24px; }
         .page-intro h1 { font-size: clamp(2rem, 4vw, 3rem); }
 
         .filter-bar {
@@ -484,12 +511,12 @@
         .demo-top {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             gap: 12px;
         }
 
         /* ========================================
-           活动图标（大尺寸 + 悬停趣味动画）
+           活动图标（统一尺寸 90×90，SVG 64×64）
            ======================================== */
 
         .icon-box {
@@ -503,11 +530,14 @@
             transition: transform .35s cubic-bezier(.34,1.56,.64,1),
                         background .35s ease,
                         box-shadow .35s ease;
-            cursor: pointer;
+            flex-shrink: 0;
         }
 
+        .icon-box.sleep { background: var(--lavender); }
+        .icon-box.connection { background: var(--orange-light); }
+
         .demo-card:hover .icon-box {
-            transform: scale(1.12) rotate(-4deg);
+            transform: scale(1.08) rotate(-3deg);
             box-shadow: 0 10px 22px rgba(35, 60, 53, .15);
         }
 
@@ -517,123 +547,98 @@
             transition: transform .35s ease;
         }
 
-        .demo-card:hover .icon-box svg {
-            transform: scale(1.08);
+        /* ---- 主题1 右上角黄色星星 ---- */
+        .icon-star-decor {
+            position: absolute;
+            top: 4px;
+            right: 6px;
+            width: 20px;
+            height: 20px;
+            opacity: 0;
+            transform: scale(.5);
+            transition: opacity .35s ease, transform .35s ease;
+            pointer-events: none;
         }
 
-        /* 猫咪打呼噜 */
+        .demo-card:hover .icon-star-decor {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* ---- 主题2-1 橘猫 ZZZ ---- */
         .icon-cat .zzz {
             opacity: 0;
-            transform: translateY(6px);
-            transition: opacity .35s ease, transform .35s ease;
+            transition: opacity .35s ease;
         }
 
-        .demo-card:hover .icon-cat .zzz {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .demo-card:hover .icon-cat .zzz { opacity: 1; }
 
-        /* 台灯发光 */
+        /* ---- 主题2-2 台灯发光 ---- */
         .icon-lamp .glow {
             opacity: 0;
             transition: opacity .35s ease;
         }
 
-        .demo-card:hover .icon-lamp .glow {
-            opacity: 1;
+        .demo-card:hover .icon-lamp .glow { opacity: 1; }
+
+        /* ---- 主题2-3 笔记本合上 ---- */
+        .icon-notebook .cover-left {
+            transform-origin: 32px 44px;
+            transform: rotate(0deg);
+            transition: transform .5s ease;
         }
 
-        /* 睡帽冒云朵 */
-        .icon-cap .cloud {
+        .demo-card:hover .icon-notebook .cover-left {
+            transform: rotate(-75deg);
+        }
+
+        /* ---- 主题3-1 两颗心靠近 ---- */
+        .icon-heart .heart-right {
             opacity: 0;
-            transform: translateY(8px);
-            transition: opacity .4s ease, transform .4s ease;
+            transform: translateX(14px);
+            transition: opacity .5s ease, transform .5s ease;
         }
 
-        .demo-card:hover .icon-cap .cloud {
+        .demo-card:hover .icon-heart .heart-right {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateX(0);
         }
 
-        /* 担忧的想法：云由暗变亮 */
-        .icon-thought .storm {
+        .icon-heart .heart-left {
+            transition: transform .5s ease;
+        }
+
+        .demo-card:hover .icon-heart .heart-left {
+            transform: translateX(-3px);
+        }
+
+        /* ---- 主题3-2 小人被抱住 ---- */
+        .icon-hug .hugger {
+            opacity: 0;
+            transform: translate(10px, -6px) scale(.7);
+            transform-origin: 40px 40px;
+            transition: opacity .5s ease, transform .5s ease;
+        }
+
+        .demo-card:hover .icon-hug .hugger {
+            opacity: 1;
+            transform: translate(0, 0) scale(1);
+        }
+
+        .icon-hug .tear {
+            opacity: 1;
             transition: opacity .35s ease;
         }
 
-        .icon-thought .sun {
-            opacity: 0;
-            transition: opacity .35s ease;
-        }
+        .demo-card:hover .icon-hug .tear { opacity: 0; }
 
-        .demo-card:hover .icon-thought .storm {
-            opacity: 0;
-        }
-
-        .demo-card:hover .icon-thought .sun {
-            opacity: 1;
-        }
-
-        /* 感官重置：波纹扩散 */
-        .icon-senses .wave {
-            opacity: 0;
-            transform-origin: center;
-            transition: opacity .35s ease;
-        }
-
-        .demo-card:hover .icon-senses .wave {
-            opacity: 1;
-        }
-
-        /* 学习计划：打勾 */
-        .icon-plan .check {
-            stroke-dasharray: 20;
-            stroke-dashoffset: 20;
-            transition: stroke-dashoffset .5s ease;
-        }
-
-        .demo-card:hover .icon-plan .check {
-            stroke-dashoffset: 0;
-        }
-
-        /* 屏幕暂停：暂停符号 */
-        .icon-screen .pause {
-            opacity: 0;
-            transition: opacity .35s ease;
-        }
-
-        .demo-card:hover .icon-screen .pause {
-            opacity: 1;
-        }
-
-        /* 对自己友善：心跳 */
-        .icon-heart .heart {
-            transform-origin: center;
-            transition: transform .35s ease;
-        }
-
-        .demo-card:hover .icon-heart .heart {
-            transform: scale(1.15);
-        }
-
-        /* 向人求助：手举起 */
-        .icon-reach .hand {
-            transform-origin: bottom center;
-            transition: transform .4s ease;
-        }
-
-        .demo-card:hover .icon-reach .hand {
-            transform: rotate(-15deg) translateY(-4px);
-        }
-
-        /* 重要的事：星星闪烁 */
-        .icon-star .sparkle {
+        /* ---- 主题3-3 星星闪烁 ---- */
+        .icon-sparkle .sparkle {
             opacity: 0;
             transition: opacity .35s ease;
         }
 
-        .demo-card:hover .icon-star .sparkle {
-            opacity: 1;
-        }
+        .demo-card:hover .icon-sparkle .sparkle { opacity: 1; }
 
         /* ========================================
            主题横幅
@@ -736,7 +741,7 @@
         }
 
         /* ========================================
-           原生弹窗
+           弹窗
            ======================================== */
 
         dialog {
@@ -896,14 +901,8 @@
 
         details p { margin: 10px 0 0; color: var(--muted); }
 
-        .result-value {
-            font-size: 1.6rem;
-            color: var(--green);
-            font-weight: 700;
-        }
-
         /* ========================================
-           页脚与 toast
+           页脚
            ======================================== */
 
         .site-footer {
@@ -950,10 +949,7 @@
            视频页
            ======================================== */
 
-        .video-page {
-            padding: 30px 0;
-        }
-
+        .video-page { padding: 30px 0; }
         .video-page h1 { margin-bottom: 20px; }
 
         .video-frame {
@@ -1027,8 +1023,8 @@
             .hero-art { display: none; }
             .dialog-header, .dialog-body { padding-left: 18px; padding-right: 18px; }
             .mood-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-            .icon-box { width: 72px; height: 72px; }
-            .icon-box svg { width: 52px; height: 52px; }
+            .icon-box { width: 76px; height: 76px; }
+            .icon-box svg { width: 54px; height: 54px; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1073,9 +1069,7 @@
             </ul>
         </nav>
 
-        <button class="btn outline" data-action="login" id="login-button">
-            Log in ↗
-        </button>
+        <button class="btn outline" data-action="login" id="login-button">Log in ↗</button>
     </div>
 </header>
 
@@ -1092,15 +1086,12 @@
         <div class="footer-inner">
             <div>
                 <strong>StressExterminators</strong>
-                <p class="footer-note">
-                    A student wellbeing prototype for Aotearoa New Zealand.
-                </p>
+                <p class="footer-note">A student wellbeing prototype for Aotearoa New Zealand.</p>
                 <p class="footer-note">
                     © <span id="year"></span> StressExterminators student project.
-                    Design updated: 5 October 2026.
+                    Design updated: 8 October 2026.
                 </p>
             </div>
-
             <nav aria-label="Footer navigation">
                 <ul class="footer-links">
                     <li><a href="#about">About & privacy</a></li>
@@ -1109,10 +1100,8 @@
                 </ul>
             </nav>
         </div>
-
         <p class="footer-note">
-            Demo contact:
-            <a href="mailto:design@example.com">design@example.com</a>
+            Demo contact: <a href="mailto:design@example.com">design@example.com</a>
             — placeholder only, not a monitored support address.
         </p>
     </div>
@@ -1142,7 +1131,7 @@
             completed: new Set(),
             activities: [],
             assessments: [],
-            videosWatched: []   // 新增：已看过的视频
+            videosWatched: []
         };
     }
 
@@ -1170,7 +1159,15 @@
             tag: "A little more headspace",
             description: "Try a small reset for study pressure, busy thoughts and overwhelming days.",
             art: "stress",
-            video: "school.mp4"
+            video: "https://github.com/yeziqistu/stress-exterminators/raw/main/school.mp4",
+            videoShort: "This short animation shows a teenager at a desk with a grey cloud above their head. The cloud slowly turns into warm sunlight as they breathe.",
+            videoLong: [
+                "A teenager sits at a desk with textbooks. A grey stormy cloud appears above them.",
+                "The cloud grows larger as papers pile up. The teenager holds their head.",
+                "The teenager closes their eyes and breathes slowly. The cloud softens.",
+                "The cloud becomes a warm orange sun. The teenager smiles gently.",
+                "The screen fades to green. The StressExterminators logo and name appear."
+            ]
         },
         sleep: {
             title: "Rest & recharge",
@@ -1178,7 +1175,15 @@
             tag: "Make room for rest",
             description: "Explore gentle routines for winding down and making space to rest.",
             art: "sleep",
-            video: "rest.mp4"
+            video: "https://github.com/yeziqistu/stress-exterminators/raw/main/rest.mp4",
+            videoShort: "This calm animation shows a quiet bedroom, a sleeping orange cat, and a teenager winding down for the night.",
+            videoLong: [
+                "A quiet bedroom at night. An orange cat sleeps on a lavender blanket.",
+                "A teenager closes a book. The bedside lamp glows warmly.",
+                "The lamp goes out. The room fades to lavender. Small Z letters float up.",
+                "The cat stretches and curls up. The teenager lies down and smiles.",
+                "The screen fades to lavender. The StressExterminators logo and name appear."
+            ]
         },
         connection: {
             title: "Connection & confidence",
@@ -1186,13 +1191,20 @@
             tag: "You do not have to do it alone",
             description: "Practise kinder self-talk and small ways to connect with people you trust.",
             art: "connection",
-            video: "connection.mp4"
+            video: "https://github.com/yeziqistu/stress-exterminators/raw/main/connection.mp4",
+            videoShort: "This gentle animation shows a girl reaching out to a boy sitting alone in a classroom, and then joining a game outside together.",
+            videoLong: [
+                "A boy sits alone in a classroom. A grey cloud hovers above him.",
+                "A girl reaches out her hand toward him.",
+                "He takes her hand and stands. The cloud turns to warm light.",
+                "They join a group playing a friendly game outside.",
+                "The StressExterminators logo and name appear."
+            ]
         }
     };
 
     /* ========================================
-       Demos（每个主题三个活动）
-       每个 demo 有 icon 字段，用来画 SVG
+       Demos（9 个活动）
        ======================================== */
 
     const demos = [
@@ -1297,7 +1309,7 @@
         {
             id: "screen",
             topic: "sleep",
-            icon: "cap",
+            icon: "notebook",
             title: "Try a screen pause",
             time: "2 min",
             description: "Plan a small screen break without judging yourself or your habits.",
@@ -1337,7 +1349,7 @@
         {
             id: "reachout",
             topic: "connection",
-            icon: "reach",
+            icon: "hug",
             title: "Plan a small reach-out",
             time: "4 min",
             description: "Find words for asking someone you trust for a little support.",
@@ -1453,7 +1465,7 @@
     });
 
     /* ========================================
-       3. 首页大插画（hero、主题）
+       3. 首页大插画
        ======================================== */
 
     function illustration(type) {
@@ -1516,54 +1528,16 @@
     }
 
     /* ========================================
-       4. 活动图标（大尺寸 + 悬停动画）
+       4. 活动图标（统一 64×64 viewBox）
        ======================================== */
 
     function activityIcon(type) {
         const open = `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">`;
         const close = `</svg>`;
 
-        if (type === "cat") {
-            // 睡着的橘色猫咪 + 悬停出现 ZZZ
-            return open + `
-                <ellipse cx="32" cy="44" rx="22" ry="12" fill="#F4B28C"/>
-                <circle cx="18" cy="34" r="11" fill="#F4B28C"/>
-                <path d="M10 26L14 18L20 26Z" fill="#F4B28C"/>
-                <path d="M22 26L26 18L32 26Z" fill="#F4B28C"/>
-                <circle cx="15" cy="34" r="1.5" fill="#442E22"/>
-                <circle cx="21" cy="34" r="1.5" fill="#442E22"/>
-                <path d="M17 38Q18 40 20 38" stroke="#442E22" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <path d="M28 52Q34 56 40 52" stroke="#442E22" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <text class="zzz" x="40" y="22" font-size="10" font-weight="700" fill="#615078">z</text>
-                <text class="zzz" x="46" y="16" font-size="12" font-weight="700" fill="#615078">Z</text>
-                <text class="zzz" x="52" y="10" font-size="14" font-weight="700" fill="#615078">Z</text>
-            ` + close;
-        }
-
-        if (type === "lamp") {
-            // 紫色台灯 + 悬停发出黄色光线
-            return open + `
-                <path class="glow" d="M18 14L46 14L38 34L26 34Z" fill="#FFE9A8" opacity="0"/>
-                <path d="M20 12H44L37 32H27Z" fill="#615078"/>
-                <rect x="30" y="32" width="4" height="18" fill="#615078"/>
-                <rect x="22" y="50" width="20" height="4" rx="2" fill="#615078"/>
-                <circle cx="32" cy="22" r="4" fill="#F4B28C"/>
-            ` + close;
-        }
-
-        if (type === "cap") {
-            // 紫色睡帽 + 悬停冒出梦的云朵
-            return open + `
-                <path class="cloud" d="M40 10a6 6 0 0 1 10 4 5 5 0 0 1-2 9H38a5 5 0 0 1-1-10 6 6 0 0 1 3-3z"
-                      fill="#DDD5ED" opacity="0"/>
-                <path d="M14 48 L18 18 Q20 12 26 12 L38 14 Q46 16 44 26 L40 48Z" fill="#615078"/>
-                <circle cx="42" cy="12" r="4" fill="#F4B28C"/>
-                <rect x="12" y="48" width="32" height="4" rx="2" fill="#615078"/>
-            ` + close;
-        }
+        /* ==== 主题1：School & stress ==== */
 
         if (type === "thought") {
-            // 担忧的想法：乌云 → 悬停变太阳
             return open + `
                 <circle cx="32" cy="34" r="22" fill="#E6F0E9"/>
                 <g class="storm">
@@ -1579,7 +1553,6 @@
         }
 
         if (type === "senses") {
-            // 感官重置：扩散的波纹
             return open + `
                 <circle cx="32" cy="32" r="22" fill="#E6F0E9"/>
                 <circle cx="32" cy="32" r="6" fill="#235C50"/>
@@ -1589,7 +1562,6 @@
         }
 
         if (type === "plan") {
-            // 学习计划：打勾
             return open + `
                 <circle cx="32" cy="32" r="22" fill="#E6F0E9"/>
                 <rect x="22" y="18" width="20" height="28" rx="3" fill="#fff" stroke="#235C50" stroke-width="2.5"/>
@@ -1599,42 +1571,83 @@
             ` + close;
         }
 
-        if (type === "screen") {
-            // 屏幕暂停
+        /* ==== 主题2：Rest & recharge ==== */
+
+        /* 橘猫——照抄你参考代码里的画法 */
+        if (type === "cat") {
+            return open + `
+                <ellipse cx="32" cy="44" rx="22" ry="12" fill="#F4B28C"/>
+                <circle cx="18" cy="34" r="11" fill="#F4B28C"/>
+                <path d="M10 26L14 18L20 26Z" fill="#F4B28C"/>
+                <path d="M22 26L26 18L32 26Z" fill="#F4B28C"/>
+                <path d="M13 34q2.5 2 5 0" stroke="#442E22" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                <path d="M19 34q2.5 2 5 0" stroke="#442E22" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                <path d="M17 38Q18 40 20 38" stroke="#442E22" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <path d="M28 52Q34 56 40 52" stroke="#442E22" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <text class="zzz" x="40" y="22" font-size="10" font-weight="700" fill="#615078">z</text>
+                <text class="zzz" x="46" y="16" font-size="12" font-weight="700" fill="#615078">Z</text>
+                <text class="zzz" x="52" y="10" font-size="14" font-weight="700" fill="#615078">Z</text>
+            ` + close;
+        }
+
+        if (type === "lamp") {
+            // 台灯（上窄下宽梯形）+ 悬停发光
+            return open + `
+                <path class="glow" d="M22 12L42 12L48 36H16Z" fill="#FFE9A8" opacity="0"/>
+                <path d="M22 12H42L48 36H16Z" fill="#615078"/>
+                <rect x="30" y="36" width="4" height="14" fill="#615078"/>
+                <rect x="22" y="50" width="20" height="4" rx="2" fill="#615078"/>
+                <circle cx="32" cy="22" r="4" fill="#F4B28C"/>
+            ` + close;
+        }
+
+        if (type === "notebook") {
+            // 翻开的笔记本 + 悬停合上
             return open + `
                 <circle cx="32" cy="32" r="22" fill="#DDD5ED"/>
-                <rect x="18" y="22" width="28" height="18" rx="3" fill="#fff" stroke="#615078" stroke-width="2.5"/>
-                <path d="M26 48h12" stroke="#615078" stroke-width="2.5" stroke-linecap="round"/>
-                <g class="pause">
-                    <rect x="28" y="28" width="3" height="8" fill="#615078"/>
-                    <rect x="34" y="28" width="3" height="8" fill="#615078"/>
+                <!-- 右页（不动） -->
+                <rect x="32" y="20" width="14" height="24" fill="#fff" stroke="#615078" stroke-width="1.5"/>
+                <path d="M35 26h8M35 31h8M35 36h8" stroke="#615078" stroke-width="1.2" stroke-linecap="round"/>
+                <!-- 左页（合上的那一页） -->
+                <g class="cover-left">
+                    <rect x="18" y="20" width="14" height="24" fill="#fff" stroke="#615078" stroke-width="1.5"/>
+                    <path d="M21 26h8M21 31h8M21 36h8" stroke="#615078" stroke-width="1.2" stroke-linecap="round"/>
                 </g>
+                <!-- 书脊 -->
+                <line x1="32" y1="20" x2="32" y2="44" stroke="#615078" stroke-width="1.5"/>
             ` + close;
         }
+
+        /* ==== 主题3：Connection & confidence ==== */
 
         if (type === "heart") {
-            // 对自己友善：心跳
+            // 两颗心靠近
             return open + `
                 <circle cx="32" cy="32" r="22" fill="#F7D9C2"/>
-                <path class="heart" d="M32 44c-9-6-13-11-13-16a7 7 0 0 1 13-4 7 7 0 0 1 13 4c0 5-4 10-13 16z" fill="#235C50"/>
+                <path class="heart-left" d="M22 38c-5-3-7-6-7-9a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 3-2 6-7 9z" fill="#235C50"/>
+                <path class="heart-right" d="M42 38c-5-3-7-6-7-9a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 3-2 6-7 9z" fill="#F4B28C"/>
             ` + close;
         }
 
-        if (type === "reach") {
-            // 向人求助：手举起
+        if (type === "hug") {
+            // 小人上半身 + 左下泪滴 + 悬停时大的人从右上方抱住
             return open + `
                 <circle cx="32" cy="32" r="22" fill="#F7D9C2"/>
-                <circle cx="26" cy="26" r="5" fill="#235C50"/>
-                <path d="M18 42c0-4 4-7 8-7s8 3 8 7" stroke="#235C50" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                <g class="hand">
-                    <path d="M42 34c-3 0-5 2-5 5" stroke="#235C50" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                    <path d="M40 30v-3M44 31v-2M47 34v-1" stroke="#235C50" stroke-width="2" stroke-linecap="round"/>
+                <!-- 小人（下方小人） -->
+                <circle cx="30" cy="34" r="6" fill="#235C50"/>
+                <path d="M22 48c0-5 4-8 8-8s8 3 8 8" fill="#235C50"/>
+                <!-- 左下方的泪滴 -->
+                <path class="tear" d="M24 36q-2 3 0 4 2 1 3-1t-3-3z" fill="#5aa0c8"/>
+                <!-- 大一点的人（从右上方抱上来） -->
+                <g class="hugger">
+                    <circle cx="42" cy="26" r="7" fill="#F4B28C"/>
+                    <path d="M32 44c0-6 5-10 10-10s10 4 10 10" fill="#F4B28C"/>
+                    <path d="M36 36q4 4 8 0" stroke="#a85b3a" stroke-width="1.4" fill="none" stroke-linecap="round"/>
                 </g>
             ` + close;
         }
 
         if (type === "star") {
-            // 重要的事：星星闪烁
             return open + `
                 <circle cx="32" cy="32" r="22" fill="#F7D9C2"/>
                 <path d="M32 16l4 10 11 1-8 7 2 11-9-6-9 6 2-11-8-7 11-1z" fill="#235C50"/>
@@ -1649,7 +1662,27 @@
     }
 
     /* ========================================
-       5. 卡片
+       5. 视频无障碍描述
+       ======================================== */
+
+    function videoDescription(topicKey) {
+        const topic = topics[topicKey];
+        if (!topic || !topic.videoShort) return "";
+
+        return `
+        <div class="video-description" role="note" aria-label="Accessible description of the video">
+            <p><strong>Audio description (for viewers who cannot see the video):</strong> ${topic.videoShort}</p>
+            <details>
+                <summary>Read the full scene-by-scene description</summary>
+                <ul>
+                    ${topic.videoLong.map(line => `<li>${line}</li>`).join("")}
+                </ul>
+            </details>
+        </div>`;
+    }
+
+    /* ========================================
+       6. 卡片
        ======================================== */
 
     function topicCard(id) {
@@ -1666,13 +1699,23 @@
         </article>`;
     }
 
-    function demoCard(demo, index) {
+    function starDecor() {
+        return `<svg class="icon-star-decor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" fill="#FFD54A" stroke="#c99400" stroke-width="0.6"/>
+        </svg>`;
+    }
+
+    function demoCard(demo) {
         const done = state.completed.has(demo.id);
+        const topicId = demo.topic;
+        const isStress = topicId === "stress";
+
         return `
         <article class="card demo-card">
           <div class="demo-top">
-            <div class="icon-box icon-${demo.icon}">
+            <div class="icon-box ${topicId} icon-${demo.icon}">
               ${activityIcon(demo.icon)}
+              ${isStress ? starDecor() : ""}
             </div>
             <span class="pill ${done ? "" : "warm"}">
               ${done ? "✓ Completed" : demo.time}
@@ -1690,7 +1733,7 @@
     }
 
     /* ========================================
-       6. 首页
+       7. 首页
        ======================================== */
 
     function homePage() {
@@ -1745,11 +1788,23 @@
             </div>
           </div>
           <video controls preload="metadata" playsinline>
-            <source src="intro.mp4" type="video/mp4">
+            <source src="https://github.com/yeziqistu/stress-exterminators/raw/main/intro.mp4" type="video/mp4">
             Your browser does not support the video tag.
-            <a href="intro.mp4">Download the introduction video</a>.
+            <a href="https://github.com/yeziqistu/stress-exterminators/raw/main/intro.mp4">Download the introduction video</a>.
           </video>
-          <p class="caption">A short introduction to this student prototype.</p>
+          <div class="video-description" role="note" aria-label="Accessible description of the introduction video">
+            <p><strong>Audio description (for viewers who cannot see the video):</strong> A leaf logo floats over green hills at sunrise. Teenagers walk together, then one teenager breathes slowly under a tree. The StressExterminators logo and team name appear at the end.</p>
+            <details>
+                <summary>Read the full scene-by-scene description</summary>
+                <ul>
+                    <li>A leaf logo floats up over green hills at sunrise.</li>
+                    <li>Teenagers walk together. A heart, a star and a cloud float past.</li>
+                    <li>A teenager breathes slowly under a tree. Calm waves spread from their chest.</li>
+                    <li>The teenager stands and walks toward friends in warm light.</li>
+                    <li>The screen fades to green. The StressExterminators logo and name appear.</li>
+                </ul>
+            </details>
+          </div>
         </section>
 
         <section class="section" aria-labelledby="home-topics">
@@ -1778,7 +1833,7 @@
     }
 
     /* ========================================
-       7. Explore 与主题页
+       8. Explore
        ======================================== */
 
     function explorePage() {
@@ -1852,7 +1907,7 @@
     }
 
     /* ========================================
-       8. 视频页（新增）
+       9. 视频页
        ======================================== */
 
     function videoPage(demoId) {
@@ -1876,12 +1931,11 @@
             </video>
           </div>
 
+          ${videoDescription(demo.topic)}
+
           <div class="video-info">
             <h2>You've completed the 3 reflection steps.</h2>
-            <p>
-              Watch the short video for this activity. It's just a few minutes
-              long, and you can stop, pause or leave at any time.
-            </p>
+            <p>Watch the short video for this activity. It's just a few minutes long, and you can stop, pause or leave at any time.</p>
             ${watched
                 ? `<p class="small">✓ You have already watched this video before.</p>`
                 : `<p class="small">Watching this video will be recorded in "My space".</p>`}
@@ -1898,7 +1952,7 @@
     }
 
     /* ========================================
-       9. 个人页面
+       10. 个人页面
        ======================================== */
 
     function profilePage() {
@@ -2049,7 +2103,7 @@
     }
 
     /* ========================================
-       10. 支持与关于页面
+       11. 支持与关于
        ======================================== */
 
     function supportPage() {
@@ -2151,7 +2205,7 @@
     }
 
     /* ========================================
-       11. 弹窗
+       12. 弹窗
        ======================================== */
 
     function showLogin() {
@@ -2261,7 +2315,7 @@
     }
 
     /* ========================================
-       12. 路由
+       13. 路由
        ======================================== */
 
     function renderPage(moveFocus = false) {
@@ -2318,9 +2372,7 @@
                     : [{ label: "Home", href: "#home" }, { label: title }]
             );
 
-            if (route === "explore") {
-                updateActivityGrid();
-            }
+            if (route === "explore") updateActivityGrid();
         }
 
         document.title = `${title} | StressExterminators`;
@@ -2350,7 +2402,7 @@
     });
 
     /* ========================================
-       13. 点击事件
+       14. 点击事件
        ======================================== */
 
     document.addEventListener("click", event => {
@@ -2420,7 +2472,7 @@
     });
 
     /* ========================================
-       14. 表单事件
+       15. 表单事件
        ======================================== */
 
     document.addEventListener("submit", event => {
@@ -2463,7 +2515,6 @@
             state.completed.add(demo.id);
             state.activities.unshift({ title: demo.title, time: now });
 
-            // 跳转到该主题的视频页
             location.hash = `video/${demo.id}`;
         }
 
