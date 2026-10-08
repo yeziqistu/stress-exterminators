@@ -1,0 +1,2502 @@
+<!DOCTYPE html>
+<html lang="en-NZ">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#235c50">
+    <meta name="description"
+          content="A student-designed wellbeing prototype for young people in Aotearoa New Zealand.">
+    <title>Home | StressExterminators</title>
+
+    <style>
+        :root {
+            --page: #f7f8f4;
+            --surface: #ffffff;
+            --ink: #233c35;
+            --muted: #596860;
+            --green: #235c50;
+            --green-light: #e6f0e9;
+            --orange: #f4b28c;
+            --orange-light: #fff0e5;
+            --lavender: #eeeaf7;
+            --purple: #615078;
+            --line: #dce3dc;
+            --radius: 24px;
+            --shadow: 0 12px 35px rgba(35, 60, 53, .06);
+        }
+
+        * { box-sizing: border-box; }
+        [hidden] { display: none !important; }
+
+        body {
+            margin: 0;
+            background: var(--page);
+            color: var(--ink);
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        body.modal-open { overflow: hidden; }
+
+        button, input, textarea { font: inherit; }
+        button, a, input, textarea { -webkit-tap-highlight-color: transparent; }
+        button { cursor: pointer; }
+        a { color: var(--green); text-underline-offset: 4px; }
+        a:visited { color: var(--purple); }
+        button:disabled { opacity: .65; cursor: default; }
+
+        :focus-visible {
+            outline: 3px solid var(--purple);
+            outline-offset: 5px;
+        }
+
+        h1, h2, h3, p { margin-top: 0; }
+        h1, h2, h3 { line-height: 1.18; }
+        h1 { font-size: clamp(2rem, 4.6vw, 3.7rem); letter-spacing: -.055em; }
+        h2 { font-size: clamp(1.45rem, 2.6vw, 2rem); letter-spacing: -.035em; }
+        h3 { font-size: 1.15rem; }
+        p { margin-bottom: 1rem; }
+        svg { display: block; max-width: 100%; }
+
+        .container {
+            width: min(1160px, calc(100% - 48px));
+            margin-inline: auto;
+        }
+
+        .muted, .small { color: var(--muted); }
+        .small { font-size: .875rem; }
+
+        .eyebrow {
+            display: block;
+            margin-bottom: 12px;
+            color: var(--green);
+            font-size: .75rem;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 99px;
+            padding: 5px 11px;
+            background: var(--green-light);
+            color: var(--green);
+            font-size: .75rem;
+            font-weight: 700;
+        }
+
+        .pill.warm { background: var(--orange-light); color: #714525; }
+
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            min-height: 46px;
+            padding: 11px 20px;
+            border: 1px solid transparent;
+            border-radius: 13px;
+            background: var(--green);
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            line-height: 1.35;
+            transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+        }
+
+        a.btn:visited { color: white; }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(35, 60, 53, .13);
+        }
+
+        .btn.warm, a.btn.warm:visited {
+            background: var(--orange);
+            color: #442e22;
+        }
+
+        .btn.outline, a.btn.outline:visited {
+            background: transparent;
+            border-color: var(--line);
+            color: var(--green);
+        }
+
+        .btn.light, a.btn.light:visited {
+            background: var(--green-light);
+            color: var(--green);
+        }
+
+        .btn.danger {
+            color: #763c2d;
+            background: var(--orange-light);
+            border-color: #d8b09e;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card {
+            min-width: 0;
+            padding: 25px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .section { margin-top: 38px; }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .section-head h2, .section-head p { margin-bottom: 0; }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .skip-link {
+            position: fixed;
+            left: 16px;
+            top: -100px;
+            z-index: 100;
+            padding: 12px 18px;
+            background: white;
+            color: var(--green);
+            border: 2px solid var(--green);
+            border-radius: 10px;
+        }
+
+        .skip-link:focus { top: 12px; }
+
+        /* ========================================
+           顶部导航
+           ======================================== */
+
+        .site-header {
+            background: rgba(255, 255, 255, .98);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px 22px;
+            min-height: 84px;
+            padding-block: 14px;
+        }
+
+        .brand, .brand:visited {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .brand-symbol {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            background: var(--green);
+            border-radius: 14px;
+        }
+
+        .brand-name {
+            display: block;
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: -.035em;
+        }
+
+        .brand-sub {
+            display: block;
+            color: var(--muted);
+            font-size: .7rem;
+        }
+
+        .main-nav ul, .breadcrumbs ol, .footer-links {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            list-style: none;
+            gap: 5px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .main-nav a, .main-nav a:visited {
+            display: block;
+            position: relative;
+            padding: 10px 13px;
+            border-radius: 10px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: .9rem;
+            font-weight: 700;
+            transition: background .18s ease, color .18s ease;
+        }
+
+        .main-nav a:hover,
+        .main-nav a:focus-visible,
+        .main-nav a[aria-current="page"] {
+            background: var(--green-light);
+            color: var(--green);
+        }
+
+        .breadcrumbs {
+            margin: 20px 0;
+            color: var(--muted);
+            font-size: .8rem;
+        }
+
+        .breadcrumbs li + li::before {
+            content: "/";
+            display: inline-block;
+            margin: 0 10px;
+            color: var(--muted);
+        }
+
+        main {
+            min-height: 65vh;
+            padding-bottom: 52px;
+        }
+
+        /* ========================================
+           首页
+           ======================================== */
+
+        .home-top {
+            display: grid;
+            grid-template-columns: minmax(0, 1.85fr) minmax(260px, 1fr);
+            gap: 22px;
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            align-items: center;
+            min-height: 320px;
+            padding: 32px;
+            border-radius: var(--radius);
+            background: var(--green-light);
+        }
+
+        .hero h1 { margin-bottom: 18px; }
+        .hero p { max-width: 34ch; color: #415d50; }
+        .hero-art { width: 100%; align-self: center; }
+
+        .checkin-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: #fffbf7;
+        }
+
+        .checkin-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 23px;
+            gap: 12px;
+        }
+
+        .sun-icon {
+            display: grid;
+            place-items: center;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--orange-light);
+            color: #714525;
+            font-size: 1.6rem;
+        }
+
+        .checkin-card .btn { width: 100%; }
+
+        .quick-note {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 24px;
+            margin-top: 17px;
+            font-size: .8rem;
+            color: var(--muted);
+        }
+
+        .topic-card {
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            overflow: hidden;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 32px rgba(35, 60, 53, .09);
+        }
+
+        .art-box {
+            padding: 12px 32px 0;
+            background: var(--green-light);
+        }
+
+        .art-box.sleep { background: var(--lavender); }
+        .art-box.connection { background: var(--orange-light); }
+
+        .art-box svg { height: 160px; width: 100%; }
+
+        .topic-body {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 23px;
+        }
+
+        .topic-body .btn { margin-top: auto; align-self: start; }
+        .topic-body h3 { margin: 12px 0; }
+
+        .support-strip {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 18px;
+            padding: 25px 30px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--lavender);
+        }
+
+        .support-strip p { margin-bottom: 0; }
+
+        /* ========================================
+           首页视频区
+           ======================================== */
+
+        .home-video {
+            margin-top: 38px;
+            padding: 25px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .home-video video {
+            width: 100%;
+            max-height: 480px;
+            border-radius: 16px;
+            background: #000;
+        }
+
+        .home-video .caption {
+            margin-top: 14px;
+            font-size: .9rem;
+            color: var(--muted);
+        }
+
+        /* ========================================
+           主题筛选及活动
+           ======================================== */
+
+        .page-intro {
+            max-width: 760px;
+            margin-bottom: 24px;
+        }
+
+        .page-intro h1 { font-size: clamp(2rem, 4vw, 3rem); }
+
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 9px;
+            width: fit-content;
+            max-width: 100%;
+            margin-bottom: 24px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: white;
+        }
+
+        .filter-button {
+            position: relative;
+            min-height: 44px;
+            border: 0;
+            border-radius: 12px;
+            padding: 10px 19px;
+            background: transparent;
+            color: var(--muted);
+            font-weight: 700;
+            transition: transform .2s ease, background .2s ease, color .2s ease;
+        }
+
+        .filter-button:hover,
+        .filter-button:focus-visible {
+            transform: translateY(-3px);
+            background: var(--green-light);
+            color: var(--green);
+        }
+
+        .filter-button[aria-pressed="true"] {
+            background: var(--green);
+            color: white;
+        }
+
+        .demo-card {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .demo-card h3 { margin-top: 16px; }
+        .demo-card .btn { margin-top: auto; align-self: flex-start; }
+
+        .demo-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ========================================
+           活动图标（大尺寸 + 悬停趣味动画）
+           ======================================== */
+
+        .icon-box {
+            position: relative;
+            display: grid;
+            place-items: center;
+            width: 90px;
+            height: 90px;
+            border-radius: 22px;
+            background: var(--green-light);
+            transition: transform .35s cubic-bezier(.34,1.56,.64,1),
+                        background .35s ease,
+                        box-shadow .35s ease;
+            cursor: pointer;
+        }
+
+        .demo-card:hover .icon-box {
+            transform: scale(1.12) rotate(-4deg);
+            box-shadow: 0 10px 22px rgba(35, 60, 53, .15);
+        }
+
+        .icon-box svg {
+            width: 64px;
+            height: 64px;
+            transition: transform .35s ease;
+        }
+
+        .demo-card:hover .icon-box svg {
+            transform: scale(1.08);
+        }
+
+        /* 猫咪打呼噜 */
+        .icon-cat .zzz {
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity .35s ease, transform .35s ease;
+        }
+
+        .demo-card:hover .icon-cat .zzz {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 台灯发光 */
+        .icon-lamp .glow {
+            opacity: 0;
+            transition: opacity .35s ease;
+        }
+
+        .demo-card:hover .icon-lamp .glow {
+            opacity: 1;
+        }
+
+        /* 睡帽冒云朵 */
+        .icon-cap .cloud {
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity .4s ease, transform .4s ease;
+        }
+
+        .demo-card:hover .icon-cap .cloud {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 担忧的想法：云由暗变亮 */
+        .icon-thought .storm {
+            transition: opacity .35s ease;
+        }
+
+        .icon-thought .sun {
+            opacity: 0;
+            transition: opacity .35s ease;
+        }
+
+        .demo-card:hover .icon-thought .storm {
+            opacity: 0;
+        }
+
+        .demo-card:hover .icon-thought .sun {
+            opacity: 1;
+        }
+
+        /* 感官重置：波纹扩散 */
+        .icon-senses .wave {
+            opacity: 0;
+            transform-origin: center;
+            transition: opacity .35s ease;
+        }
+
+        .demo-card:hover .icon-senses .wave {
+            opacity: 1;
+        }
+
+        /* 学习计划：打勾 */
+        .icon-plan .check {
+            stroke-dasharray: 20;
+            stroke-dashoffset: 20;
+            transition: stroke-dashoffset .5s ease;
+        }
+
+        .demo-card:hover .icon-plan .check {
+            stroke-dashoffset: 0;
+        }
+
+        /* 屏幕暂停：暂停符号 */
+        .icon-screen .pause {
+            opacity: 0;
+            transition: opacity .35s ease;
+        }
+
+        .demo-card:hover .icon-screen .pause {
+            opacity: 1;
+        }
+
+        /* 对自己友善：心跳 */
+        .icon-heart .heart {
+            transform-origin: center;
+            transition: transform .35s ease;
+        }
+
+        .demo-card:hover .icon-heart .heart {
+            transform: scale(1.15);
+        }
+
+        /* 向人求助：手举起 */
+        .icon-reach .hand {
+            transform-origin: bottom center;
+            transition: transform .4s ease;
+        }
+
+        .demo-card:hover .icon-reach .hand {
+            transform: rotate(-15deg) translateY(-4px);
+        }
+
+        /* 重要的事：星星闪烁 */
+        .icon-star .sparkle {
+            opacity: 0;
+            transition: opacity .35s ease;
+        }
+
+        .demo-card:hover .icon-star .sparkle {
+            opacity: 1;
+        }
+
+        /* ========================================
+           主题横幅
+           ======================================== */
+
+        .topic-banner {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            align-items: center;
+            gap: 20px;
+            padding: 28px;
+            margin-bottom: 28px;
+            background: var(--green-light);
+            border-radius: var(--radius);
+        }
+
+        .topic-banner svg { height: 190px; width: 100%; }
+        .topic-banner h1 { font-size: clamp(2rem, 4vw, 3rem); }
+
+        /* ========================================
+           个人页面
+           ======================================== */
+
+        .profile-heading {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .avatar {
+            display: grid;
+            place-items: center;
+            width: 74px;
+            height: 74px;
+            flex-shrink: 0;
+            background: var(--green-light);
+            border-radius: 24px;
+            font-size: 2rem;
+        }
+
+        .profile-heading h1 { margin-bottom: 4px; font-size: 2.2rem; }
+
+        .stat-number {
+            display: block;
+            margin: 7px 0;
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -.05em;
+            color: var(--green);
+        }
+
+        progress {
+            display: block;
+            width: 100%;
+            height: 13px;
+            margin: 10px 0 20px;
+            border: none;
+            accent-color: var(--green);
+            border-radius: 20px;
+            overflow: hidden;
+            background: var(--green-light);
+        }
+
+        progress::-webkit-progress-bar { background: var(--green-light); }
+        progress::-webkit-progress-value { background: var(--green); border-radius: 20px; }
+        progress::-moz-progress-bar { background: var(--green); }
+
+        .record-list { list-style: none; padding: 0; margin: 0; }
+
+        .record-list li {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .record-list li:last-child { border-bottom: 0; }
+        .record-list strong, .record-list time { display: block; }
+        .record-list time { color: var(--muted); font-size: .8rem; }
+
+        .empty-state {
+            padding: 22px;
+            border: 1px dashed #aab9ad;
+            border-radius: 15px;
+            color: var(--muted);
+            background: var(--page);
+        }
+
+        .notice {
+            margin: 18px 0;
+            padding: 15px 18px;
+            border-left: 4px solid var(--green);
+            background: var(--green-light);
+            border-radius: 0 12px 12px 0;
+            font-size: .9rem;
+        }
+
+        .notice.warm {
+            background: var(--orange-light);
+            border-left-color: #ab6035;
+        }
+
+        /* ========================================
+           原生弹窗
+           ======================================== */
+
+        dialog {
+            width: min(620px, calc(100% - 28px));
+            max-height: 88vh;
+            max-height: 88dvh;
+            padding: 0;
+            border: 1px solid var(--line);
+            border-radius: 25px;
+            background: white;
+            color: var(--ink);
+            box-shadow: 0 24px 100px rgba(0, 0, 0, .2);
+        }
+
+        dialog::backdrop { background: rgba(21, 42, 34, .48); }
+
+        .dialog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 24px 26px 16px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .dialog-header h2 { margin: 4px 0 0; font-size: 1.5rem; }
+
+        .close-button {
+            display: grid;
+            place-items: center;
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+            border: 0;
+            border-radius: 50%;
+            background: var(--page);
+            color: var(--ink);
+            font-size: 1.6rem;
+        }
+
+        .dialog-body { padding: 24px 26px 28px; }
+
+        .login-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            width: 100%;
+            margin-top: 13px;
+            padding: 19px;
+            text-align: left;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            color: var(--ink);
+            background: var(--page);
+        }
+
+        .login-option:hover {
+            background: var(--green-light);
+            border-color: var(--green);
+        }
+
+        .login-option strong, .login-option small { display: block; }
+        .login-option small { color: var(--muted); margin-top: 4px; }
+
+        fieldset {
+            padding: 0;
+            margin: 0 0 22px;
+            border: 0;
+            min-width: 0;
+        }
+
+        legend { margin-bottom: 12px; font-weight: 700; }
+
+        .mood-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .mood-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 12px 4px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--page);
+            cursor: pointer;
+            font-size: .8rem;
+        }
+
+        .mood-option:has(input:checked) {
+            outline: 2px solid var(--green);
+            background: var(--green-light);
+        }
+
+        .mood-option .face { font-size: 1.7rem; }
+
+        input[type="radio"] { accent-color: var(--green); }
+
+        input[type="range"] {
+            width: 100%;
+            min-height: 38px;
+            accent-color: var(--green);
+        }
+
+        .range-row { margin: 20px 0; }
+
+        .range-row label {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            font-weight: 700;
+        }
+
+        .range-scale {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            color: var(--muted);
+            font-size: .8rem;
+        }
+
+        textarea {
+            display: block;
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            padding: 12px;
+            margin-top: 9px;
+            border: 1px solid #aab9ad;
+            border-radius: 12px;
+            color: var(--ink);
+            background: white;
+        }
+
+        .exercise-step {
+            padding: 18px;
+            margin: 16px 0;
+            border-radius: 16px;
+            background: var(--page);
+            border: 1px solid var(--line);
+        }
+
+        .exercise-step label { display: block; font-weight: 700; }
+
+        details { margin-top: 10px; font-size: .9rem; }
+
+        summary {
+            cursor: pointer;
+            color: var(--green);
+            font-weight: 700;
+            padding: 5px 0;
+        }
+
+        details p { margin: 10px 0 0; color: var(--muted); }
+
+        .result-value {
+            font-size: 1.6rem;
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        /* ========================================
+           页脚与 toast
+           ======================================== */
+
+        .site-footer {
+            padding: 30px 0;
+            border-top: 1px solid var(--line);
+            background: white;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-links { gap: 18px; font-size: .875rem; }
+
+        .footer-note {
+            margin: 9px 0 0;
+            font-size: .78rem;
+            color: var(--muted);
+        }
+
+        .toast {
+            position: fixed;
+            z-index: 20;
+            bottom: 24px;
+            left: 50%;
+            width: max-content;
+            max-width: calc(100% - 30px);
+            padding: 13px 20px;
+            border-radius: 14px;
+            background: var(--green);
+            color: white;
+            box-shadow: var(--shadow);
+            transform: translateX(-50%);
+            pointer-events: none;
+        }
+
+        .toast:empty { display: none; }
+
+        /* ========================================
+           视频页
+           ======================================== */
+
+        .video-page {
+            padding: 30px 0;
+        }
+
+        .video-page h1 { margin-bottom: 20px; }
+
+        .video-frame {
+            background: #000;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .video-frame video {
+            display: block;
+            width: 100%;
+            max-height: 560px;
+        }
+
+        .video-info {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--green-light);
+            border-radius: var(--radius);
+        }
+
+        .video-actions {
+            margin-top: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        /* ========================================
+           响应式
+           ======================================== */
+
+        @media (min-width: 1100px) {
+            .hero { min-height: 345px; }
+        }
+
+        @media (max-width: 980px) {
+            .header-inner { gap: 10px; }
+            .main-nav { order: 3; width: 100%; }
+            .main-nav ul { justify-content: center; }
+            .hero { padding: 26px; grid-template-columns: 1.4fr .8fr; }
+            .grid-3 { gap: 14px; }
+            .card { padding: 20px; }
+            .topic-card { padding: 0; }
+        }
+
+        @media (max-width: 760px) {
+            .container { width: min(100% - 30px, 600px); }
+            .home-top, .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .hero { min-height: 310px; }
+            .hero-art { min-width: 90px; }
+            .checkin-card { gap: 10px; }
+            .checkin-top { margin-bottom: 14px; }
+            .section { margin-top: 30px; }
+            .section-head { align-items: start; flex-direction: column; gap: 8px; }
+            .topic-banner { grid-template-columns: 1fr; }
+            .topic-banner svg { height: 140px; }
+            .art-box svg { height: 170px; }
+            .main-nav a { padding: 9px 10px; }
+            .filter-bar { width: 100%; }
+            .filter-button { flex: 1 1 40%; }
+        }
+
+        @media (max-width: 420px) {
+            .brand-name { font-size: .9rem; }
+            .brand-symbol { width: 34px; height: 34px; }
+            .header-inner > .btn { min-height: 42px; padding: 9px 12px; }
+            .main-nav a { font-size: .82rem; padding: 8px; }
+            .hero { grid-template-columns: 1fr; }
+            .hero-art { display: none; }
+            .dialog-header, .dialog-body { padding-left: 18px; padding-right: 18px; }
+            .mood-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .icon-box { width: 72px; height: 72px; }
+            .icon-box svg { width: 52px; height: 52px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                transition: none !important;
+                animation: none !important;
+                scroll-behavior: auto !important;
+            }
+            .btn:hover, .topic-card:hover, .filter-button:hover,
+            .demo-card:hover .icon-box, .demo-card:hover .icon-box svg {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<a href="#main" class="skip-link" id="skip-link">Skip to main content</a>
+
+<header class="site-header">
+    <div class="container header-inner">
+        <a class="brand" href="#home" aria-label="StressExterminators home">
+        <span class="brand-symbol" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+            <path d="M8 25C5 13 14 5 26 5C27 18 20 27 8 25Z" fill="#E6F0E9"/>
+            <path d="M7 27L21 12M12 22L12 15M17 17L23 17"
+                  stroke="#235C50" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+            <span>
+          <span class="brand-name">StressExterminators</span>
+          <span class="brand-sub">Small steps. Your own pace.</span>
+        </span>
+        </a>
+
+        <nav class="main-nav" aria-label="Main navigation">
+            <ul>
+                <li><a href="#home" data-nav="home">Home</a></li>
+                <li><a href="#explore" data-nav="explore">Explore</a></li>
+                <li><a href="#profile" data-nav="profile">My space</a></li>
+                <li><a href="#support" data-nav="support">Get support</a></li>
+            </ul>
+        </nav>
+
+        <button class="btn outline" data-action="login" id="login-button">
+            Log in ↗
+        </button>
+    </div>
+</header>
+
+<div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol id="breadcrumb-list"></ol>
+    </nav>
+
+    <main id="main" tabindex="-1"></main>
+</div>
+
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-inner">
+            <div>
+                <strong>StressExterminators</strong>
+                <p class="footer-note">
+                    A student wellbeing prototype for Aotearoa New Zealand.
+                </p>
+                <p class="footer-note">
+                    © <span id="year"></span> StressExterminators student project.
+                    Design updated: 5 October 2026.
+                </p>
+            </div>
+
+            <nav aria-label="Footer navigation">
+                <ul class="footer-links">
+                    <li><a href="#about">About & privacy</a></li>
+                    <li><a href="#explore">Activities</a></li>
+                    <li><a href="#support">Support</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <p class="footer-note">
+            Demo contact:
+            <a href="mailto:design@example.com">design@example.com</a>
+            — placeholder only, not a monitored support address.
+        </p>
+    </div>
+</footer>
+
+<dialog id="modal" aria-labelledby="modal-title">
+    <div class="dialog-header">
+        <h2 id="modal-title" tabindex="-1"></h2>
+        <button type="button" class="close-button" data-action="close" aria-label="Close dialog">×</button>
+    </div>
+    <div class="dialog-body" id="modal-body"></div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+    "use strict";
+
+    /* ========================================
+       1. 状态
+       ======================================== */
+
+    function initialState() {
+        return {
+            guest: false,
+            checkins: [],
+            completed: new Set(),
+            activities: [],
+            assessments: [],
+            videosWatched: []   // 新增：已看过的视频
+        };
+    }
+
+    let state = initialState();
+    let activeFilter = "all";
+    let toastTimer;
+    let lastFocus = null;
+
+    const main = document.getElementById("main");
+    const modal = document.getElementById("modal");
+    const modalBody = document.getElementById("modal-body");
+
+    const moods = [
+        { value: "Tough", face: "😟" },
+        { value: "Low", face: "🙁" },
+        { value: "Okay", face: "😐" },
+        { value: "Good", face: "🙂" },
+        { value: "Great", face: "😊" }
+    ];
+
+    const topics = {
+        stress: {
+            title: "School & stress",
+            short: "School stress",
+            tag: "A little more headspace",
+            description: "Try a small reset for study pressure, busy thoughts and overwhelming days.",
+            art: "stress",
+            video: "school.mp4"
+        },
+        sleep: {
+            title: "Rest & recharge",
+            short: "Rest & sleep",
+            tag: "Make room for rest",
+            description: "Explore gentle routines for winding down and making space to rest.",
+            art: "sleep",
+            video: "rest.mp4"
+        },
+        connection: {
+            title: "Connection & confidence",
+            short: "Connection",
+            tag: "You do not have to do it alone",
+            description: "Practise kinder self-talk and small ways to connect with people you trust.",
+            art: "connection",
+            video: "connection.mp4"
+        }
+    };
+
+    /* ========================================
+       Demos（每个主题三个活动）
+       每个 demo 有 icon 字段，用来画 SVG
+       ======================================== */
+
+    const demos = [
+        // ==== 主题1：School & stress ====
+        {
+            id: "thought",
+            topic: "stress",
+            icon: "thought",
+            title: "Catch a worried thought",
+            time: "4 min",
+            description: "Separate a stressful prediction from what you actually know.",
+            steps: [
+                ["Notice the thought",
+                    "What thought is showing up? You can use an imaginary situation.",
+                    "I might fail my next maths test."],
+                ["Look for a fuller picture",
+                    "What supports the thought? What information does it leave out?",
+                    "Some questions are difficult, but I understood yesterday's practice."],
+                ["Try a balanced response",
+                    "Write something realistic and kind, rather than forcing positivity.",
+                    "I do not know the result yet. I can practise one topic and ask for help."]
+            ]
+        },
+        {
+            id: "grounding",
+            topic: "stress",
+            icon: "senses",
+            title: "A senses reset",
+            time: "2 min",
+            description: "Pause and notice the space around you, using senses that feel comfortable.",
+            steps: [
+                ["Notice your surroundings",
+                    "Name up to three things you can see, or notice in another accessible way.",
+                    "A window, a green notebook and the shape of a chair."],
+                ["Find a comfortable anchor",
+                    "Notice a sound or a physical contact point. Skip anything uncomfortable.",
+                    "My feet touching the floor, or a quiet sound in the room."],
+                ["Choose your next small step",
+                    "What would feel manageable right now?",
+                    "Get a drink of water, then read one paragraph."]
+            ]
+        },
+        {
+            id: "study",
+            topic: "stress",
+            icon: "plan",
+            title: "Make a tiny study plan",
+            time: "3 min",
+            description: "Turn a large school task into one manageable starting point.",
+            steps: [
+                ["Name one task",
+                    "Choose one school task rather than your whole to-do list.",
+                    "Prepare for my science assignment."],
+                ["Make the first step smaller",
+                    "What could you reasonably start in five minutes?",
+                    "Open my notes and write three things I already know."],
+                ["Plan a pause or some support",
+                    "When will you pause, or who could help if you get stuck?",
+                    "After ten minutes I will stretch, and ask my teacher about one question."]
+            ]
+        },
+
+        // ==== 主题2：Rest & recharge ====
+        {
+            id: "winddown",
+            topic: "sleep",
+            icon: "cat",
+            title: "Build a wind-down routine",
+            time: "3 min",
+            description: "Create a short evening routine that fits your own home and schedule.",
+            steps: [
+                ["Pick a gentle cue",
+                    "What could remind you that it is time to start winding down?",
+                    "Finishing my evening snack."],
+                ["Choose one quiet activity",
+                    "Choose something practical in your space, without buying anything.",
+                    "Listen to quiet music or read a familiar book."],
+                ["Make it flexible",
+                    "What is a smaller version for a busy evening?",
+                    "Put tomorrow's things together and take two quiet minutes."]
+            ]
+        },
+        {
+            id: "worry",
+            topic: "sleep",
+            icon: "lamp",
+            title: "Park a worry for later",
+            time: "4 min",
+            description: "Give a non-urgent worry a place and a possible next step.",
+            steps: [
+                ["Name a non-urgent worry",
+                    "Use a general or imaginary worry. Immediate safety concerns need support now.",
+                    "I am worried about a group assignment next week."],
+                ["Separate action from uncertainty",
+                    "Is there one practical action you can take later?",
+                    "Ask my group which part I should work on."],
+                ["Choose a time to revisit it",
+                    "When could you return to that action instead of solving it tonight?",
+                    "After breakfast tomorrow, I can write a message to my group."]
+            ]
+        },
+        {
+            id: "screen",
+            topic: "sleep",
+            icon: "cap",
+            title: "Try a screen pause",
+            time: "2 min",
+            description: "Plan a small screen break without judging yourself or your habits.",
+            steps: [
+                ["Notice your pattern",
+                    "When does using a screen feel less helpful for you?",
+                    "When I keep scrolling even though I want to rest."],
+                ["Choose an alternative",
+                    "What could you do for a few minutes instead?",
+                    "Stretch, draw or listen to something with the screen off."],
+                ["Keep it achievable",
+                    "Choose a short pause that works for you.",
+                    "Try five minutes, then decide what I need next."]
+            ]
+        },
+
+        // ==== 主题3：Connection & confidence ====
+        {
+            id: "kindness",
+            topic: "connection",
+            icon: "heart",
+            title: "Talk to yourself like a friend",
+            time: "3 min",
+            description: "Practise a kinder response to a difficult moment.",
+            steps: [
+                ["Notice a hard moment",
+                    "Choose a small everyday difficulty or use an imaginary example.",
+                    "I gave the wrong answer in class."],
+                ["Imagine a friend",
+                    "What would you say to a friend in the same situation?",
+                    "One answer does not define you. It is okay to be learning."],
+                ["Bring some kindness back",
+                    "How could you say something similar to yourself?",
+                    "That felt awkward, but I am allowed to make mistakes."]
+            ]
+        },
+        {
+            id: "reachout",
+            topic: "connection",
+            icon: "reach",
+            title: "Plan a small reach-out",
+            time: "4 min",
+            description: "Find words for asking someone you trust for a little support.",
+            steps: [
+                ["Think of a trusted person",
+                    "You do not need to enter their name. Think of a friend, whānau member or adult.",
+                    "A school counsellor or a trusted person in my whānau."],
+                ["Choose a simple opening",
+                    "What could you say or write?",
+                    "Things have felt a bit much. Could we talk sometime today?"],
+                ["Make a backup plan",
+                    "If that person is unavailable, who else could you try?",
+                    "Another trusted adult, my school support team or a youth support service."]
+            ]
+        },
+        {
+            id: "values",
+            topic: "connection",
+            icon: "star",
+            title: "One thing that matters",
+            time: "3 min",
+            description: "Choose a small action connected to something you care about.",
+            steps: [
+                ["Pick something important",
+                    "What matters to you? There is no single right answer.",
+                    "Friendship, creativity, whānau, learning or caring for the environment."],
+                ["Choose one small action",
+                    "What is a practical action connected to that value?",
+                    "Send a friendly message or spend five minutes drawing."],
+                ["Make space for it",
+                    "When might you try it, and how could you make it easier?",
+                    "After school, with the materials I already have."]
+            ]
+        }
+    ];
+
+    /* ========================================
+       2. 通用函数
+       ======================================== */
+
+    function escapeHTML(value) {
+        return String(value).replace(/[&<>"']/g, character => ({
+            "&": "&amp;", "<": "&lt;", ">": "&gt;",
+            '"': "&quot;", "'": "&#39;"
+        })[character]);
+    }
+
+    function localDay() {
+        const date = new Date();
+        return [
+            date.getFullYear(),
+            String(date.getMonth() + 1).padStart(2, "0"),
+            String(date.getDate()).padStart(2, "0")
+        ].join("-");
+    }
+
+    function dateText(iso) {
+        return new Intl.DateTimeFormat("en-NZ", {
+            day: "numeric", month: "short",
+            hour: "2-digit", minute: "2-digit"
+        }).format(new Date(iso));
+    }
+
+    function todayCheckin() {
+        return state.checkins.find(item => item.day === localDay());
+    }
+
+    function notify(message) {
+        const toast = document.getElementById("toast");
+        clearTimeout(toastTimer);
+        toast.textContent = message;
+        toastTimer = setTimeout(() => { toast.textContent = ""; }, 4200);
+    }
+
+    function updateLoginButton() {
+        document.getElementById("login-button").textContent =
+            state.guest ? "Guest mode ✓" : "Log in ↗";
+    }
+
+    function ensureGuest() {
+        state.guest = true;
+        updateLoginButton();
+    }
+
+    function setBreadcrumbs(items) {
+        document.getElementById("breadcrumb-list").innerHTML =
+            items.map((item, index) => {
+                const current = index === items.length - 1;
+                return `<li>${
+                    current
+                        ? `<span aria-current="page">${escapeHTML(item.label)}</span>`
+                        : `<a href="${item.href}">${escapeHTML(item.label)}</a>`
+                }</li>`;
+            }).join("");
+    }
+
+    function openModal(title, content) {
+        if (!modal.open) lastFocus = document.activeElement;
+        document.getElementById("modal-title").textContent = title;
+        modalBody.innerHTML = content;
+        if (!modal.open) modal.showModal();
+        document.body.classList.add("modal-open");
+        document.getElementById("modal-title").focus();
+    }
+
+    function closeModal() { modal.close(); }
+
+    modal.addEventListener("close", () => {
+        document.body.classList.remove("modal-open");
+        modalBody.innerHTML = "";
+        if (lastFocus && lastFocus.isConnected) lastFocus.focus();
+        else main.focus({ preventScroll: true });
+    });
+
+    /* ========================================
+       3. 首页大插画（hero、主题）
+       ======================================== */
+
+    function illustration(type) {
+        const start = `<svg viewBox="0 0 320 220" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">`;
+        const end = "</svg>";
+
+        if (type === "hero") {
+            return start + `
+          <circle cx="198" cy="85" r="61" fill="#F7F8F4"/>
+          <circle cx="241" cy="54" r="22" fill="#F4B28C"/>
+          <path d="M12 173L94 74L151 147L215 90L314 179Z" fill="#B8D0BF"/>
+          <path d="M62 175L127 96L193 176Z" fill="#235C50"/>
+          <path d="M108 119L127 96L148 122L134 117L126 126Z" fill="#FFFFFF"/>
+          <path d="M5 178Q85 145 154 178T320 173V220H0Z" fill="#8AB497"/>
+          <path d="M112 220Q215 170 168 162Q149 154 166 146"
+                fill="none" stroke="#F7F8F4" stroke-width="14" stroke-linecap="round"/>
+          <path d="M266 179V109M266 132Q238 128 240 109 Q265 108 266 132M266 151Q289 145 289 124 Q263 125 266 151"
+                fill="#235C50" stroke="#235C50" stroke-width="5" stroke-linecap="round"/>
+        ` + end;
+        }
+
+        if (type === "stress") {
+            return start + `
+          <circle cx="164" cy="105" r="77" fill="#D0E1D3"/>
+          <rect x="84" y="56" width="126" height="130" rx="13" fill="#FFFFFF" transform="rotate(-9 147 121)"/>
+          <rect x="121" y="40" width="112" height="144" rx="13" fill="#235C50" transform="rotate(8 177 112)"/>
+          <path d="M146 82L205 90M143 105L196 112M140 127L183 133"
+                stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="93" cy="157" r="31" fill="#F4B28C"/>
+          <path d="M80 157L89 166L106 147" fill="none" stroke="#442E22" stroke-width="6"
+                stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M257 87V65M246 76H268" stroke="#235C50" stroke-width="5" stroke-linecap="round"/>
+        ` + end;
+        }
+
+        if (type === "sleep") {
+            return start + `
+          <circle cx="161" cy="110" r="80" fill="#DDD5ED"/>
+          <path d="M183 42C145 47 125 74 132 110 C139 150 178 168 214 148
+                   C190 181 144 185 115 153 C79 113 103 52 151 43 C161 41 172 40 183 42Z" fill="#615078"/>
+          <path d="M227 57L232 70L246 74L232 79L227 93 L222 79L208 74L222 70Z" fill="#F4B28C"/>
+          <path d="M83 72L87 81L97 85L87 89L83 99 L79 89L69 85L79 81Z" fill="#615078"/>
+          <path d="M89 181C88 166 104 158 117 164 C129 139 162 146 168 165
+                   C191 157 206 171 204 185H89Z" fill="#FFFFFF"/>
+        ` + end;
+        }
+
+        return start + `
+        <circle cx="160" cy="110" r="80" fill="#F7D9C2"/>
+        <path d="M68 68Q68 44 92 44H178Q202 44 202 68V110 Q202 134 178 134H123L94 156V134H92
+                 Q68 134 68 110Z" fill="#FFFFFF"/>
+        <path d="M149 107Q149 86 170 86H239Q260 86 260 107V143 Q260 164 239 164H233V185L204 164H170
+                 Q149 164 149 143Z" fill="#235C50"/>
+        <circle cx="107" cy="88" r="6" fill="#615078"/>
+        <circle cx="133" cy="88" r="6" fill="#615078"/>
+        <circle cx="159" cy="88" r="6" fill="#615078"/>
+        <path d="M181 123L195 137L225 109" fill="none" stroke="#FFFFFF" stroke-width="7"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      ` + end;
+    }
+
+    /* ========================================
+       4. 活动图标（大尺寸 + 悬停动画）
+       ======================================== */
+
+    function activityIcon(type) {
+        const open = `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">`;
+        const close = `</svg>`;
+
+        if (type === "cat") {
+            // 睡着的橘色猫咪 + 悬停出现 ZZZ
+            return open + `
+                <ellipse cx="32" cy="44" rx="22" ry="12" fill="#F4B28C"/>
+                <circle cx="18" cy="34" r="11" fill="#F4B28C"/>
+                <path d="M10 26L14 18L20 26Z" fill="#F4B28C"/>
+                <path d="M22 26L26 18L32 26Z" fill="#F4B28C"/>
+                <circle cx="15" cy="34" r="1.5" fill="#442E22"/>
+                <circle cx="21" cy="34" r="1.5" fill="#442E22"/>
+                <path d="M17 38Q18 40 20 38" stroke="#442E22" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <path d="M28 52Q34 56 40 52" stroke="#442E22" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <text class="zzz" x="40" y="22" font-size="10" font-weight="700" fill="#615078">z</text>
+                <text class="zzz" x="46" y="16" font-size="12" font-weight="700" fill="#615078">Z</text>
+                <text class="zzz" x="52" y="10" font-size="14" font-weight="700" fill="#615078">Z</text>
+            ` + close;
+        }
+
+        if (type === "lamp") {
+            // 紫色台灯 + 悬停发出黄色光线
+            return open + `
+                <path class="glow" d="M18 14L46 14L38 34L26 34Z" fill="#FFE9A8" opacity="0"/>
+                <path d="M20 12H44L37 32H27Z" fill="#615078"/>
+                <rect x="30" y="32" width="4" height="18" fill="#615078"/>
+                <rect x="22" y="50" width="20" height="4" rx="2" fill="#615078"/>
+                <circle cx="32" cy="22" r="4" fill="#F4B28C"/>
+            ` + close;
+        }
+
+        if (type === "cap") {
+            // 紫色睡帽 + 悬停冒出梦的云朵
+            return open + `
+                <path class="cloud" d="M40 10a6 6 0 0 1 10 4 5 5 0 0 1-2 9H38a5 5 0 0 1-1-10 6 6 0 0 1 3-3z"
+                      fill="#DDD5ED" opacity="0"/>
+                <path d="M14 48 L18 18 Q20 12 26 12 L38 14 Q46 16 44 26 L40 48Z" fill="#615078"/>
+                <circle cx="42" cy="12" r="4" fill="#F4B28C"/>
+                <rect x="12" y="48" width="32" height="4" rx="2" fill="#615078"/>
+            ` + close;
+        }
+
+        if (type === "thought") {
+            // 担忧的想法：乌云 → 悬停变太阳
+            return open + `
+                <circle cx="32" cy="34" r="22" fill="#E6F0E9"/>
+                <g class="storm">
+                    <path d="M20 30a8 8 0 0 1 8-8 8 8 0 0 1 14 3 6 6 0 0 1 0 12H22a6 6 0 0 1-2-7z" fill="#9AB3A0"/>
+                    <path d="M24 40l-3 6M32 40l-3 6M40 40l-3 6" stroke="#615078" stroke-width="2" stroke-linecap="round"/>
+                </g>
+                <g class="sun">
+                    <circle cx="32" cy="32" r="9" fill="#F4B28C"/>
+                    <path d="M32 16v5M32 43v5M16 32h5M43 32h5M21 21l3 3M40 40l3 3M43 21l-3 3M21 43l3-3"
+                          stroke="#F4B28C" stroke-width="2.5" stroke-linecap="round"/>
+                </g>
+            ` + close;
+        }
+
+        if (type === "senses") {
+            // 感官重置：扩散的波纹
+            return open + `
+                <circle cx="32" cy="32" r="22" fill="#E6F0E9"/>
+                <circle cx="32" cy="32" r="6" fill="#235C50"/>
+                <circle class="wave" cx="32" cy="32" r="14" fill="none" stroke="#235C50" stroke-width="2" opacity="0"/>
+                <circle class="wave" cx="32" cy="32" r="20" fill="none" stroke="#235C50" stroke-width="2" opacity="0"/>
+            ` + close;
+        }
+
+        if (type === "plan") {
+            // 学习计划：打勾
+            return open + `
+                <circle cx="32" cy="32" r="22" fill="#E6F0E9"/>
+                <rect x="22" y="18" width="20" height="28" rx="3" fill="#fff" stroke="#235C50" stroke-width="2.5"/>
+                <path d="M27 28h10M27 34h10M27 40h6" stroke="#235C50" stroke-width="2.5" stroke-linecap="round"/>
+                <path class="check" d="M40 42l4 4 8-9" stroke="#F4B28C" stroke-width="3" fill="none"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+            ` + close;
+        }
+
+        if (type === "screen") {
+            // 屏幕暂停
+            return open + `
+                <circle cx="32" cy="32" r="22" fill="#DDD5ED"/>
+                <rect x="18" y="22" width="28" height="18" rx="3" fill="#fff" stroke="#615078" stroke-width="2.5"/>
+                <path d="M26 48h12" stroke="#615078" stroke-width="2.5" stroke-linecap="round"/>
+                <g class="pause">
+                    <rect x="28" y="28" width="3" height="8" fill="#615078"/>
+                    <rect x="34" y="28" width="3" height="8" fill="#615078"/>
+                </g>
+            ` + close;
+        }
+
+        if (type === "heart") {
+            // 对自己友善：心跳
+            return open + `
+                <circle cx="32" cy="32" r="22" fill="#F7D9C2"/>
+                <path class="heart" d="M32 44c-9-6-13-11-13-16a7 7 0 0 1 13-4 7 7 0 0 1 13 4c0 5-4 10-13 16z" fill="#235C50"/>
+            ` + close;
+        }
+
+        if (type === "reach") {
+            // 向人求助：手举起
+            return open + `
+                <circle cx="32" cy="32" r="22" fill="#F7D9C2"/>
+                <circle cx="26" cy="26" r="5" fill="#235C50"/>
+                <path d="M18 42c0-4 4-7 8-7s8 3 8 7" stroke="#235C50" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <g class="hand">
+                    <path d="M42 34c-3 0-5 2-5 5" stroke="#235C50" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <path d="M40 30v-3M44 31v-2M47 34v-1" stroke="#235C50" stroke-width="2" stroke-linecap="round"/>
+                </g>
+            ` + close;
+        }
+
+        if (type === "star") {
+            // 重要的事：星星闪烁
+            return open + `
+                <circle cx="32" cy="32" r="22" fill="#F7D9C2"/>
+                <path d="M32 16l4 10 11 1-8 7 2 11-9-6-9 6 2-11-8-7 11-1z" fill="#235C50"/>
+                <g class="sparkle">
+                    <path d="M48 18l1 3 3 1-3 1-1 3-1-3-3-1 3-1z" fill="#F4B28C"/>
+                    <path d="M16 22l1 2 2 1-2 1-1 2-1-2-2-1 2-1z" fill="#F4B28C"/>
+                </g>
+            ` + close;
+        }
+
+        return open + `<circle cx="32" cy="32" r="22" fill="#E6F0E9"/>` + close;
+    }
+
+    /* ========================================
+       5. 卡片
+       ======================================== */
+
+    function topicCard(id) {
+        const topic = topics[id];
+        return `
+        <article class="card topic-card">
+          <div class="art-box ${id}">${illustration(topic.art)}</div>
+          <div class="topic-body">
+            <span class="small">3 guided demos · Go at your pace</span>
+            <h3>${topic.title}</h3>
+            <p class="muted">${topic.description}</p>
+            <a class="btn outline" href="#topic/${id}">Explore topic →</a>
+          </div>
+        </article>`;
+    }
+
+    function demoCard(demo, index) {
+        const done = state.completed.has(demo.id);
+        return `
+        <article class="card demo-card">
+          <div class="demo-top">
+            <div class="icon-box icon-${demo.icon}">
+              ${activityIcon(demo.icon)}
+            </div>
+            <span class="pill ${done ? "" : "warm"}">
+              ${done ? "✓ Completed" : demo.time}
+            </span>
+          </div>
+          <h3>${demo.title}</h3>
+          <p class="small">${topics[demo.topic].short}</p>
+          <p class="muted">${demo.description}</p>
+          <button class="btn ${done ? "light" : "outline"}"
+                  data-action="exercise"
+                  data-id="${demo.id}">
+            ${done ? "Practise again" : "Open demo"} →
+          </button>
+        </article>`;
+    }
+
+    /* ========================================
+       6. 首页
+       ======================================== */
+
+    function homePage() {
+        const checkin = todayCheckin();
+        return `
+        <section class="home-top" aria-label="Welcome and daily check-in">
+          <div class="hero">
+            <div>
+              <span class="eyebrow"><span lang="mi">Kia ora</span>, welcome</span>
+              <h1>A little less stress.<br>A little more you.</h1>
+              <p>Small wellbeing activities for young people in Aotearoa New Zealand. Start wherever you are.</p>
+              <a class="btn" href="#explore">Find your first activity →</a>
+            </div>
+            <div class="hero-art">${illustration("hero")}</div>
+          </div>
+
+          <article class="card checkin-card">
+            <div>
+              <div class="checkin-top">
+                <span class="sun-icon" aria-hidden="true">☀</span>
+                <span class="pill ${checkin ? "" : "warm"}">
+                  ${checkin ? "✓ Completed today" : "○ To do"}
+                </span>
+              </div>
+              <h2>Today's mood check-in</h2>
+              <p class="muted">
+                ${checkin
+                    ? `You checked in feeling <strong>${checkin.mood.toLowerCase()}</strong>. Every feeling is welcome.`
+                    : "How are things feeling right now? Take a moment, just for you."}
+              </p>
+            </div>
+            <div>
+              <button class="btn warm" data-action="checkin">
+                ${checkin ? "Update my check-in" : "Check in with myself"} →
+              </button>
+              <p class="small" style="margin: 10px 0 0">About 30 seconds · No right or wrong answers</p>
+            </div>
+          </article>
+        </section>
+
+        <div class="quick-note">
+          <span>✓ Free to explore</span>
+          <span>✓ No account needed</span>
+          <span>✓ Short, text-first activities</span>
+        </div>
+
+        <section class="home-video" aria-label="Introduction video">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Watch</span>
+              <h2>What is StressExterminators?</h2>
+            </div>
+          </div>
+          <video controls preload="metadata" playsinline>
+            <source src="intro.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+            <a href="intro.mp4">Download the introduction video</a>.
+          </video>
+          <p class="caption">A short introduction to this student prototype.</p>
+        </section>
+
+        <section class="section" aria-labelledby="home-topics">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Choose your starting point</span>
+              <h2 id="home-topics">What would help today?</h2>
+            </div>
+            <a href="#explore">View all 9 activities →</a>
+          </div>
+          <div class="grid-3">${Object.keys(topics).map(topicCard).join("")}</div>
+        </section>
+
+        <section class="section support-strip" aria-label="Support reminder">
+          <div>
+            <h3>You do not have to figure it out alone.</h3>
+            <p class="muted">A trusted friend, whānau member or school counsellor can help.</p>
+          </div>
+          <a href="#support" class="btn outline">Find support ↗</a>
+        </section>
+
+        <p class="small section">
+          Student prototype, not a clinical service. Your entries stay in
+          this page's memory and disappear when the page is refreshed or closed.
+        </p>`;
+    }
+
+    /* ========================================
+       7. Explore 与主题页
+       ======================================== */
+
+    function explorePage() {
+        return `
+        <section class="page-intro">
+          <span class="eyebrow">Your wellbeing toolkit</span>
+          <h1>Small steps. Plenty of ways to start.</h1>
+          <p class="muted">Choose a topic or explore all nine demos. There is no fixed order and no pressure to finish everything.</p>
+        </section>
+
+        <div class="filter-bar" role="group" aria-label="Filter activities by topic">
+          <button class="filter-button" data-action="filter" data-filter="all" aria-pressed="${activeFilter === "all"}">All activities</button>
+          ${Object.entries(topics).map(([id, topic]) => `
+            <button class="filter-button" data-action="filter" data-filter="${id}" aria-pressed="${activeFilter === id}">
+              ${topic.short}
+            </button>
+          `).join("")}
+        </div>
+
+        <p class="small" id="filter-count" role="status"></p>
+        <div class="grid-3" id="activity-grid"></div>
+
+        <div class="notice">
+          These are educational CBT-inspired demos, not a validated treatment programme.
+          Skip or stop an exercise if it does not feel helpful.
+        </div>`;
+    }
+
+    function updateActivityGrid() {
+        const filtered = activeFilter === "all"
+            ? demos
+            : demos.filter(demo => demo.topic === activeFilter);
+
+        document.getElementById("activity-grid").innerHTML =
+            filtered.map(demoCard).join("");
+
+        document.getElementById("filter-count").textContent =
+            `${filtered.length} activities · ${activeFilter === "all" ? "All topics" : topics[activeFilter].title}`;
+
+        document.querySelectorAll("[data-filter]").forEach(button => {
+            button.setAttribute("aria-pressed", String(button.dataset.filter === activeFilter));
+        });
+    }
+
+    function topicPage(id) {
+        const topic = topics[id];
+        const topicDemos = demos.filter(demo => demo.topic === id);
+
+        return `
+        <section class="topic-banner">
+          <div>
+            <span class="eyebrow">${topic.tag}</span>
+            <h1>${topic.title}</h1>
+            <p>${topic.description}</p>
+            <span class="pill">3 demos · 2–4 minutes each</span>
+          </div>
+          <div>${illustration(topic.art)}</div>
+        </section>
+
+        <div class="section-head">
+          <h2>Try a small activity</h2>
+          <a href="#explore">Explore other topics →</a>
+        </div>
+
+        <div class="grid-3">${topicDemos.map(demoCard).join("")}</div>
+
+        <div class="notice">
+          Use real or imaginary examples. You never need to share names,
+          school details or anything private to complete these demos.
+        </div>`;
+    }
+
+    /* ========================================
+       8. 视频页（新增）
+       ======================================== */
+
+    function videoPage(demoId) {
+        const demo = demos.find(item => item.id === demoId);
+        if (!demo) return null;
+
+        const topic = topics[demo.topic];
+        const watched = state.videosWatched.some(v => v.id === demoId);
+
+        return `
+        <section class="video-page">
+          <span class="eyebrow">${topic.short} · Activity video</span>
+          <h1>${demo.title}</h1>
+          <p class="muted">${demo.description}</p>
+
+          <div class="video-frame">
+            <video controls preload="metadata" playsinline>
+              <source src="${topic.video}" type="video/mp4">
+              Your browser does not support the video tag.
+              <a href="${topic.video}">Download this video</a>.
+            </video>
+          </div>
+
+          <div class="video-info">
+            <h2>You've completed the 3 reflection steps.</h2>
+            <p>
+              Watch the short video for this activity. It's just a few minutes
+              long, and you can stop, pause or leave at any time.
+            </p>
+            ${watched
+                ? `<p class="small">✓ You have already watched this video before.</p>`
+                : `<p class="small">Watching this video will be recorded in "My space".</p>`}
+          </div>
+
+          <div class="video-actions">
+            <button class="btn" data-action="mark-watched" data-id="${demoId}">
+              ${watched ? "✓ Marked as watched" : "Mark video as watched"}
+            </button>
+            <a href="#profile" class="btn light">View my progress →</a>
+            <a href="#explore" class="btn outline">Back to activities</a>
+          </div>
+        </section>`;
+    }
+
+    /* ========================================
+       9. 个人页面
+       ======================================== */
+
+    function profilePage() {
+        const latest = state.assessments[0];
+        return `
+        <section class="profile-heading">
+          <div class="avatar" aria-hidden="true">🌱</div>
+          <div>
+            <span class="eyebrow">Your own little corner</span>
+            <h1>My space</h1>
+            <p class="muted" style="margin:0">
+              ${state.guest ? "Guest explorer" : "Preview mode"}
+              · Progress from this open page only
+            </p>
+          </div>
+        </section>
+
+        <div class="notice warm">
+          Shared school device? No account is created. Records are temporary and not uploaded.
+          Use "Clear my session" when you finish.
+        </div>
+
+        <div class="grid-3">
+          <article class="card">
+            <span class="small">Unique activities completed</span>
+            <strong class="stat-number">${state.completed.size}<small>/9</small></strong>
+            <span class="small">Repeating a demo does not increase this total.</span>
+          </article>
+          <article class="card">
+            <span class="small">Mood check-ins</span>
+            <strong class="stat-number">${state.checkins.length}</strong>
+            <span class="small">One saved entry per local calendar day.</span>
+          </article>
+          <article class="card">
+            <span class="small">Videos watched</span>
+            <strong class="stat-number">${state.videosWatched.length}<small>/3</small></strong>
+            <span class="small">One video per topic.</span>
+          </article>
+        </div>
+
+        <div class="grid-2 section">
+          <section class="card">
+            <h2>My activity progress</h2>
+            <p class="small">A record of participation, not a measure of mental health.</p>
+            ${Object.entries(topics).map(([id, topic]) => {
+                const complete = demos.filter(demo =>
+                    demo.topic === id && state.completed.has(demo.id)
+                ).length;
+                return `
+                <label for="progress-${id}"><strong>${topic.short}</strong> · ${complete} of 3 completed</label>
+                <progress id="progress-${id}" max="3" value="${complete}">${complete} of 3</progress>`;
+            }).join("")}
+            <a href="#explore" class="btn outline">Continue exploring →</a>
+          </section>
+
+          <section class="card">
+            <h2>Latest self-reflection</h2>
+            ${latest ? assessmentSummary(latest) : `
+              <div class="empty-state">
+                No reflection yet. Notice your stress, rest and connection
+                without receiving a diagnosis or a score.
+              </div>`}
+            <button class="btn light" style="margin-top:18px" data-action="assessment">
+              Take a moment to reflect
+            </button>
+          </section>
+        </div>
+
+        <div class="grid-2 section">
+          <section class="card">
+            <h2>Activity history</h2>
+            ${state.activities.length ? `
+              <ul class="record-list">
+                ${state.activities.map(record => `
+                  <li>
+                    <strong>✓ ${escapeHTML(record.title)}</strong>
+                    <time datetime="${record.time}">${dateText(record.time)}</time>
+                  </li>`).join("")}
+              </ul>` : `
+              <div class="empty-state">
+                Your completed activities will appear here.
+                <a href="#explore">Find an activity</a>.
+              </div>`}
+          </section>
+
+          <section class="card">
+            <h2>Mood history</h2>
+            ${state.checkins.length ? `
+              <ul class="record-list">
+                ${[...state.checkins].reverse().map(record => `
+                  <li>
+                    <strong>${record.face} ${record.mood}</strong>
+                    <time datetime="${record.time}">${dateText(record.time)}</time>
+                  </li>`).join("")}
+              </ul>` : `
+              <div class="empty-state">No check-ins yet. All feelings are welcome here.</div>`}
+            <button class="btn warm" style="margin-top:18px" data-action="checkin">
+              ${todayCheckin() ? "Update today's check-in" : "Check in now"}
+            </button>
+          </section>
+        </div>
+
+        <section class="card section">
+          <h2>Videos watched</h2>
+          ${state.videosWatched.length ? `
+            <ul class="record-list">
+              ${state.videosWatched.map(record => `
+                <li>
+                  <strong>▶ ${escapeHTML(record.title)}</strong>
+                  <time datetime="${record.time}">${dateText(record.time)}</time>
+                </li>`).join("")}
+            </ul>` : `
+            <div class="empty-state">
+              No videos watched yet. Complete an activity to unlock its video.
+            </div>`}
+        </section>
+
+        <section class="card section">
+          <h2>Reflection history</h2>
+          ${state.assessments.length ? `
+            <ul class="record-list">
+              ${state.assessments.map(record => `
+                <li>
+                  <strong>Stress ${record.stress}/10 · Rest ${record.rest}/10 · Connection ${record.connection}/10</strong>
+                  <time datetime="${record.time}">${dateText(record.time)}</time>
+                </li>`).join("")}
+            </ul>` : `<p class="muted">Your reflections will appear here.</p>`}
+        </section>
+
+        <div class="actions section">
+          <button class="btn danger" data-action="clear">Clear my session</button>
+          <a href="#about">How this prototype handles privacy</a>
+        </div>`;
+    }
+
+    function assessmentSummary(record) {
+        return `
+        <p class="small">${dateText(record.time)} · Self-reported, not diagnostic</p>
+        <ul>
+          <li>Stress right now: <strong>${record.stress}/10</strong></li>
+          <li>Feeling rested: <strong>${record.rest}/10</strong></li>
+          <li>Feeling connected: <strong>${record.connection}/10</strong></li>
+        </ul>
+        <p class="small">
+          These are separate reflections, not a combined clinical score.
+          A higher number means more of the feeling named.
+        </p>`;
+    }
+
+    /* ========================================
+       10. 支持与关于页面
+       ======================================== */
+
+    function supportPage() {
+        return `
+        <section class="page-intro">
+          <span class="eyebrow">Real people, real support</span>
+          <h1>You deserve support.</h1>
+          <p class="muted">
+            You can ask for help before things feel overwhelming.
+            This prototype is not monitored and cannot respond to emergencies.
+          </p>
+        </section>
+
+        <section class="notice warm">
+          <h2>In immediate danger?</h2>
+          <p>
+            In New Zealand, call <a href="tel:111"><strong>111</strong></a>
+            if you or someone else is in immediate danger.
+          </p>
+          <a href="tel:111" class="btn warm">Call 111</a>
+        </section>
+
+        <div class="grid-3 section">
+          <article class="card">
+            <span class="pill">Talk or text</span>
+            <h2 style="margin-top:16px">1737</h2>
+            <p>In New Zealand, call or text 1737 for free support from a trained counsellor.</p>
+            <div class="actions">
+              <a href="tel:1737" class="btn">Call 1737</a>
+              <a href="sms:1737" class="btn outline">Text 1737</a>
+            </div>
+            <p class="small" style="margin-top:15px">
+              <a href="https://1737.org.nz/">1737 official website</a>
+            </p>
+          </article>
+          <article class="card">
+            <span class="pill">Youth support</span>
+            <h2 style="margin-top:16px">Youthline</h2>
+            <p>Explore support options for young people in Aotearoa New Zealand.</p>
+            <a href="https://www.youthline.co.nz/" class="btn outline">Visit Youthline ↗</a>
+          </article>
+          <article class="card">
+            <span class="pill">Your community</span>
+            <h2 style="margin-top:16px">Someone you trust</h2>
+            <p>A school counsellor, trusted teacher, whānau member or another safe adult can help.</p>
+            <button class="btn outline" data-action="exercise" data-id="reachout">
+              Practise asking for help →
+            </button>
+          </article>
+        </div>
+
+        <p class="small section">
+          External services need an internet or phone connection. Call and text links depend on your device.
+        </p>`;
+    }
+
+    function aboutPage() {
+        return `
+        <section class="page-intro">
+          <span class="eyebrow">About this student project</span>
+          <h1>Designed to feel a little simpler.</h1>
+          <p class="muted">
+            StressExterminators is a front-end wellbeing prototype for
+            young people aged approximately 10–19 in Aotearoa New Zealand.
+          </p>
+        </section>
+
+        <div class="grid-2">
+          <section class="card">
+            <h2>Three design priorities</h2>
+            <ol>
+              <li><strong>Relevant and welcoming:</strong> school-life examples, inclusive language and local support links.</li>
+              <li><strong>Simple to use:</strong> short activities, consistent navigation and clear next steps.</li>
+              <li><strong>Accessible by design:</strong> responsive layouts, keyboard access, labelled forms and text-first content.</li>
+            </ol>
+          </section>
+          <section class="card">
+            <h2>Your privacy in this demo</h2>
+            <ul>
+              <li>No real registration, passwords or account system.</li>
+              <li>No analytics or third-party image/font downloads.</li>
+              <li>Records stay only in the current page's JavaScript memory.</li>
+              <li>Refreshing or closing the page clears these records.</li>
+              <li>Exercise writing is discarded when the exercise dialog closes.</li>
+              <li>External support websites have their own privacy practices.</li>
+            </ul>
+          </section>
+          <section class="card">
+            <h2>Culture and belonging</h2>
+            <p>Young people have different cultures, languages, identities, abilities, families and support networks.</p>
+            <p>References to Aotearoa and whānau are a starting point, not evidence of cultural validation.</p>
+          </section>
+          <section class="card">
+            <h2>What this prototype is not</h2>
+            <p>This is not a validated CBT treatment programme, crisis service, diagnostic tool or substitute for professional support.</p>
+            <a href="#support" class="btn light">Find real-world support →</a>
+          </section>
+        </div>`;
+    }
+
+    /* ========================================
+       11. 弹窗
+       ======================================== */
+
+    function showLogin() {
+        openModal("Your space, your choice", `
+        <span class="pill">No account needed to explore</span>
+        <p style="margin-top:18px">
+          Try the activities at your own pace. Both options below enter guest mode in this prototype.
+        </p>
+        <button class="login-option" data-action="guest">
+          <span><strong>Register</strong><small>Demo only — continues as a guest.</small></span>
+          <span aria-hidden="true">↗</span>
+        </button>
+        <button class="login-option" data-action="guest">
+          <span><strong>Continue as guest</strong><small>Start straight away without an email or password.</small></span>
+          <span aria-hidden="true">→</span>
+        </button>
+        <div class="notice">Your progress lasts only while this page stays open.</div>`);
+    }
+
+    function showCheckin() {
+        const existing = todayCheckin();
+        openModal("A moment for you", `
+        <p class="muted">Notice how you feel right now. You do not have to explain or change it.</p>
+        <form data-form="checkin">
+          <fieldset>
+            <legend>How are you feeling today?</legend>
+            <div class="mood-grid">
+              ${moods.map(mood => `
+                <label class="mood-option">
+                  <span class="face" aria-hidden="true">${mood.face}</span>
+                  <input type="radio" name="mood" value="${mood.value}"
+                         ${existing?.mood === mood.value ? "checked" : ""} required>
+                  <span>${mood.value}</span>
+                </label>`).join("")}
+            </div>
+          </fieldset>
+          <div class="notice">Only your chosen mood and the time are kept in this open page.</div>
+          <div class="actions">
+            <button class="btn warm" type="submit">
+              ${existing ? "Update check-in" : "Save check-in"} ✓
+            </button>
+            <button class="btn outline" type="button" data-action="close">Not now</button>
+          </div>
+        </form>`);
+    }
+
+    function showExercise(id) {
+        const demo = demos.find(item => item.id === id);
+        if (!demo) return;
+
+        openModal(demo.title, `
+        <span class="pill">${topics[demo.topic].short} · About ${demo.time}</span>
+        <p style="margin-top:16px">${demo.description}</p>
+        <p class="small" id="exercise-privacy">
+          Writing is optional. You can reflect silently or use imaginary examples.
+          Text is not saved and disappears when this dialog closes.
+        </p>
+        <form data-form="exercise" data-id="${demo.id}">
+          ${demo.steps.map((step, index) => `
+            <section class="exercise-step">
+              <span class="eyebrow">Step ${index + 1} of 3</span>
+              <label for="reflection-${index}">${step[0]}</label>
+              <p class="small" id="prompt-${index}">${step[1]}</p>
+              <textarea id="reflection-${index}" aria-describedby="prompt-${index} exercise-privacy"
+                        placeholder="Optional: write a short reflection..." maxlength="500"></textarea>
+              <details>
+                <summary>See an example</summary>
+                <p>${step[2]}</p>
+              </details>
+            </section>`).join("")}
+          <div class="notice">
+            Completion means you tried the activity. It does not measure improvement or whether you did it "correctly".
+          </div>
+          <div class="actions">
+            <button type="submit" class="btn">Next: watch the video →</button>
+            <button type="button" class="btn outline" data-action="close">Leave for now</button>
+          </div>
+        </form>`);
+    }
+
+    function showAssessment() {
+        openModal("A quick self-reflection", `
+        <p class="muted">
+          Move each slider to describe how you feel right now.
+          This is not a medical questionnaire or diagnostic assessment.
+        </p>
+        <form data-form="assessment">
+          ${[
+            ["stress", "How much stress do you feel?", "None", "A lot"],
+            ["rest", "How rested do you feel?", "Not at all", "Very rested"],
+            ["connection", "How connected do you feel?", "Not at all", "Very connected"]
+        ].map(([id, title, low, high]) => `
+            <div class="range-row">
+              <label for="${id}"><span>${title}</span><output id="${id}-value" for="${id}">5</output></label>
+              <input type="range" id="${id}" name="${id}" min="0" max="10" value="5" step="1" aria-describedby="${id}-scale">
+              <div class="range-scale" id="${id}-scale">
+                <span>0 · ${low}</span>
+                <span>10 · ${high}</span>
+              </div>
+            </div>`).join("")}
+          <p class="small">These three numbers are stored separately. No clinical total or diagnosis is generated.</p>
+          <div class="actions">
+            <button class="btn" type="submit">Save my reflection →</button>
+            <button class="btn outline" type="button" data-action="close">Cancel</button>
+          </div>
+        </form>`);
+    }
+
+    /* ========================================
+       12. 路由
+       ======================================== */
+
+    function renderPage(moveFocus = false) {
+        let route = location.hash.slice(1) || "home";
+        let activeNav = route;
+        let title;
+
+        if (route.startsWith("topic/") && topics[route.split("/")[1]]) {
+            const id = route.split("/")[1];
+            title = topics[id].title;
+            activeNav = "explore";
+            main.innerHTML = topicPage(id);
+            setBreadcrumbs([
+                { label: "Home", href: "#home" },
+                { label: "Explore", href: "#explore" },
+                { label: title }
+            ]);
+        } else if (route.startsWith("video/")) {
+            const id = route.split("/")[1];
+            const html = videoPage(id);
+            if (!html) {
+                route = "home";
+            } else {
+                const demo = demos.find(d => d.id === id);
+                title = `Video: ${demo.title}`;
+                activeNav = "explore";
+                main.innerHTML = html;
+                setBreadcrumbs([
+                    { label: "Home", href: "#home" },
+                    { label: "Explore", href: "#explore" },
+                    { label: "Video" }
+                ]);
+            }
+        } else {
+            const pages = {
+                home: ["Home", homePage],
+                explore: ["Explore", explorePage],
+                profile: ["My space", profilePage],
+                support: ["Get support", supportPage],
+                about: ["About & privacy", aboutPage]
+            };
+
+            if (!pages[route]) {
+                route = "home";
+                activeNav = "home";
+            }
+
+            title = pages[route][0];
+            main.innerHTML = pages[route][1]();
+
+            setBreadcrumbs(
+                route === "home"
+                    ? [{ label: "Home" }]
+                    : [{ label: "Home", href: "#home" }, { label: title }]
+            );
+
+            if (route === "explore") {
+                updateActivityGrid();
+            }
+        }
+
+        document.title = `${title} | StressExterminators`;
+
+        document.querySelectorAll("[data-nav]").forEach(link => {
+            if (link.dataset.nav === activeNav) link.setAttribute("aria-current", "page");
+            else link.removeAttribute("aria-current");
+        });
+
+        updateLoginButton();
+
+        if (moveFocus) {
+            window.scrollTo({ top: 0, behavior: "auto" });
+            main.focus({ preventScroll: true });
+        }
+    }
+
+    window.addEventListener("hashchange", () => {
+        if (modal.open) closeModal();
+        renderPage(true);
+    });
+
+    document.getElementById("skip-link").addEventListener("click", event => {
+        event.preventDefault();
+        main.focus();
+        main.scrollIntoView({ block: "start" });
+    });
+
+    /* ========================================
+       13. 点击事件
+       ======================================== */
+
+    document.addEventListener("click", event => {
+        const button = event.target.closest("[data-action]");
+        if (!button) return;
+
+        const action = button.dataset.action;
+
+        if (action === "login") showLogin();
+        if (action === "close") closeModal();
+        if (action === "checkin") showCheckin();
+        if (action === "assessment") showAssessment();
+        if (action === "exercise") showExercise(button.dataset.id);
+
+        if (action === "guest") {
+            ensureGuest();
+            closeModal();
+            renderPage();
+            notify("You are exploring as a guest. No account was created.");
+        }
+
+        if (action === "filter") {
+            activeFilter = button.dataset.filter;
+            updateActivityGrid();
+        }
+
+        if (action === "mark-watched") {
+            const id = button.dataset.id;
+            const demo = demos.find(item => item.id === id);
+            if (!demo) return;
+
+            if (!state.videosWatched.some(v => v.id === id)) {
+                state.videosWatched.unshift({
+                    id,
+                    title: demo.title,
+                    time: new Date().toISOString()
+                });
+                notify("Marked as watched. Recorded in My space.");
+            } else {
+                notify("Already marked as watched.");
+            }
+            renderPage();
+        }
+
+        if (action === "clear") {
+            openModal("Clear this session?", `
+          <p>This removes all activity progress, mood check-ins, self-reflections and watched-video records from this open page.</p>
+          <p class="small">This action cannot be undone.</p>
+          <div class="actions">
+            <button class="btn danger" data-action="confirm-clear">Yes, clear everything</button>
+            <button class="btn outline" data-action="close">Keep my session</button>
+          </div>`);
+        }
+
+        if (action === "confirm-clear") {
+            state = initialState();
+            closeModal();
+            renderPage();
+            notify("Your session has been cleared.");
+        }
+
+        if (action === "go-profile") {
+            closeModal();
+            if (location.hash === "#profile") renderPage(true);
+            else location.hash = "profile";
+        }
+    });
+
+    /* ========================================
+       14. 表单事件
+       ======================================== */
+
+    document.addEventListener("submit", event => {
+        const form = event.target.closest("form[data-form]");
+        if (!form) return;
+        event.preventDefault();
+
+        const data = new FormData(form);
+        const formType = form.dataset.form;
+        const now = new Date().toISOString();
+
+        if (formType === "checkin") {
+            const selected = moods.find(mood => mood.value === data.get("mood"));
+            if (!selected) return;
+
+            ensureGuest();
+            const record = { day: localDay(), time: now, mood: selected.value, face: selected.face };
+            const index = state.checkins.findIndex(item => item.day === record.day);
+            if (index >= 0) state.checkins[index] = record;
+            else state.checkins.push(record);
+
+            renderPage();
+            openModal("Check-in saved", `
+          <div class="sun-icon" aria-hidden="true" style="width:65px;height:65px;font-size:2rem;margin-bottom:18px">
+            ${selected.face}
+          </div>
+          <h3>You made a little space for yourself.</h3>
+          <p>You chose <strong>${selected.value.toLowerCase()}</strong>. All feelings are welcome.</p>
+          <div class="actions">
+            <button class="btn" data-action="go-profile">View my space →</button>
+            <button class="btn outline" data-action="close">Back to the page</button>
+          </div>`);
+        }
+
+        if (formType === "exercise") {
+            const demo = demos.find(item => item.id === form.dataset.id);
+            if (!demo) return;
+
+            ensureGuest();
+            state.completed.add(demo.id);
+            state.activities.unshift({ title: demo.title, time: now });
+
+            // 跳转到该主题的视频页
+            location.hash = `video/${demo.id}`;
+        }
+
+        if (formType === "assessment") {
+            ensureGuest();
+            const record = {
+                stress: Number(data.get("stress")),
+                rest: Number(data.get("rest")),
+                connection: Number(data.get("connection")),
+                time: now
+            };
+            state.assessments.unshift(record);
+            renderPage();
+            openModal("Your reflection, without a label", `
+          ${assessmentSummary(record)}
+          <div class="notice">
+            These numbers describe this moment only. They do not determine your mental health.
+          </div>
+          <div class="actions">
+            <button class="btn" data-action="go-profile">View my reflections →</button>
+            <button class="btn outline" data-action="close">Done</button>
+          </div>`);
+        }
+    });
+
+    document.addEventListener("input", event => {
+        if (!event.target.matches('input[type="range"]')) return;
+        const output = document.getElementById(`${event.target.id}-value`);
+        if (output) output.value = event.target.value;
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+    renderPage();
+</script>
+</body>
+</html>
